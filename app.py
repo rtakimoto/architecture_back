@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from models import Session, Passageiro, Contato
 from logger import logger
 from schemas import *
+from datetime import datetime
 from flask_cors import CORS
 
 info = Info(title="Minha API", version="1.0.0")
@@ -35,10 +36,12 @@ def add_passageiro(body:PassageiroSchema):
     """
 
     data= request.get_json();    
+    input_date = data.get("birthdate");
+    dt = datetime.strptime(input_date, "%Y-%m-%dT%H:%M:%S");
     passageiro = Passageiro(
         nome=data.get("nome"),
         cpf=data.get("cpf"),
-        birthdate=data.get("birthdate"),
+        birthdate=dt,
         flight=data.get("flight")
     )
 
@@ -121,11 +124,13 @@ def update_passageiro(body:PassageiroUpdateSchema):
     Retorna uma mensagem de confirmação da atualização.
     """
     data= request.get_json();
+    input_date = data.get("birthdate");
+    dt = datetime.strptime(input_date, "%Y-%m-%dT%H:%M:%S");
     
     passageiro_id  = data.get("id")
     passageiro_nome  = data.get("nome")
     passageiro_cpf  = data.get("cpf")
-    passageiro_birthdate = data.get("birthdate")
+    passageiro_birthdate = dt
     passageiro_flight  = data.get("flight")
     
     logger.debug(f"Atualizando passageiro de cpf: '{passageiro_cpf}'")
