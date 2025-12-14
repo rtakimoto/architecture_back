@@ -38,6 +38,7 @@ def add_passageiro(body:PassageiroSchema):
     passageiro = Passageiro(
         nome=data.get("nome"),
         cpf=data.get("cpf"),
+        birthdate=data.get("birthdate"),
         flight=data.get("flight")
     )
 
@@ -124,6 +125,7 @@ def update_passageiro(body:PassageiroUpdateSchema):
     passageiro_id  = data.get("id")
     passageiro_nome  = data.get("nome")
     passageiro_cpf  = data.get("cpf")
+    passageiro_birthdate = data.get("birthdate")
     passageiro_flight  = data.get("flight")
     
     logger.debug(f"Atualizando passageiro de cpf: '{passageiro_cpf}'")

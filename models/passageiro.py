@@ -12,6 +12,7 @@ class Passageiro(Base):
     id = Column("pk_passageiro", Integer, primary_key=True)
     nome = Column(String(140))
     cpf = Column(String(14), unique=True)
+    birthdate = Column(DateTime)
     flight = Column(String(8))
     data_insercao = Column(DateTime, default=datetime.now())
 
@@ -21,7 +22,7 @@ class Passageiro(Base):
     # de reconstruir esse relacionamento.
     contatos = relationship("Contato")
 
-    def __init__(self, nome:str, cpf:str, flight:str,
+    def __init__(self, nome:str, cpf:str, birthdate:Union[DateTime, None], flight:str,
                  data_insercao:Union[DateTime, None] = None):
         """
         Cria um Passageiro
@@ -34,6 +35,7 @@ class Passageiro(Base):
         """
         self.nome = nome
         self.cpf = cpf
+        self.birthdate = birthdate
         self.flight = flight
 
         # se não for informada, será o data exata da inserção no banco
