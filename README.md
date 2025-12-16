@@ -81,9 +81,9 @@ Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/]
 >```
 >$ docker rmi <IMAGE ID>
 >```
->Subistituindo o `IMAGE ID` pelo código da imagem
+>Substituindo o `IMAGE ID` pelo código da imagem
 >
->**Para verificar se o container está em exceução** você pode executar o seguinte comando:
+>**Para verificar se o container está em excecução** você pode executar o seguinte comando:
 >
 >```
 >$ docker container ls --all
