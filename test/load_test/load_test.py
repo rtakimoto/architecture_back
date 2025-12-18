@@ -15,7 +15,7 @@ class LoadTest(HttpUser):
         # criando o passageiro
         passageiro = {
             'birthdate': '1974-10-05T00:00:00',
-            'cpf': '43334543726',
+            'cpf': '27036343826',
             'flight': 'TAM-1234',
             'nome': 'Joao da Silva'
         }
