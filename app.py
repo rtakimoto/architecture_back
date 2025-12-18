@@ -30,14 +30,15 @@ def home():
     return redirect('/openapi')
 
 # Endpoint to validate CPF
-@app.get("/external-data", tags=[external_tag])
-def get_external_data():
+@app.get("/external-data", tags=[external_tag],
+         responses={"200": RetornaCPFSchema, "404": ErrorSchema})
+def get_external_data(query: CPFValidaSchema):
     """
     Calls an external API and returns the JSON response.
     Example: /external-data?cpf=71454597011&birthdate=1935-12-04
     """
-    cpf = request.args.get("cpf", "").strip()
-    birthdate = request.args.get("birthdate", "").strip()
+    cpf = query.cpf
+    birthdate = query.birthdate
 
     # Validate input
     if not cpf:
@@ -55,7 +56,7 @@ def get_external_data():
         response.raise_for_status()  # Raise HTTPError for bad responses
 
         data = response.json()
-        code = data.get("code") #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
+        code = data.get("code") #612 - nao encontrado, 608 - nascimento divergente do cpf, 603 - bloqueado, 200 - ok
         count = data.get("data_count")
         
         if count == 0:
@@ -63,9 +64,9 @@ def get_external_data():
             result = {
                 "code": code, #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
                 "count": count,
-                "nome": "null",
-                "situacao": "null"
-            }
+                "nome": "",
+                "situacao": ""
+            } 
         else:
             # Return only relevant fields
             result = {
@@ -144,7 +145,7 @@ def get_passageiros():
         # se não há passageiros cadastrados
         return {"passageiros": []}, 200
     else:
-        logger.debug(f"%d passageiros econtrados" % len(passageiros))
+        logger.debug(f"%d passageiros encontrados" % len(passageiros))
         # retorna a representação de passageiro
         print(passageiros)
         return apresenta_passageiros(passageiros), 200

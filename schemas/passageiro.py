@@ -10,7 +10,7 @@ class PassageiroSchema(BaseModel):
     """ Define como um novo passageiro a ser inserido deve ser representado
     """
     nome: str = "Joao da Silva"
-    cpf: str = "433.345.437-26"
+    cpf: str = "43334543726"
     birthdate: datetime = datetime(1974, 10, 5, 0, 0, 0, 0)
     flight: str = "TAM-1234"
 
@@ -20,7 +20,7 @@ class PassageiroUpdateSchema(BaseModel):
     """
     id: int = 1
     nome: str = "Joao da Silva"
-    cpf: str = "433.345.437-26"
+    cpf: str = "43334543726"
     birthdate: datetime = datetime(1974, 10, 5, 0, 0, 0, 0)
     flight: str = "TAM-1234"
 
@@ -28,7 +28,24 @@ class PassageiroBuscaSchema(BaseModel):
     """ Define como deve ser a estrutura que representa a busca. Que será
         feita apenas com base no nome do passageiro.
     """
-    cpf: str = "433.345.437-26"
+    cpf: str = "43334543726"
+
+class CPFValidaSchema(BaseModel):
+    """ Define como deve ser a estrutura que representa a busca. Que será
+        feita apenas com base no nome do passageiro.
+    """
+    cpf: str = "43334543726"
+    birthdate: str =  "1974-10-05"
+
+class RetornaCPFSchema(BaseModel):
+    """ Define como deve ser a estrutura que representa a busca. Que será
+        feita apenas com base no nome do passageiro.
+    """
+    cpf: str = "43334543726"
+    code: int = 612 #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
+    count: int = 0
+    nome: str = ""    
+    situacao: str = ""
 
 
 class ListagemPassageirosSchema(BaseModel):
@@ -59,7 +76,7 @@ class PassageiroViewSchema(BaseModel):
     """
     id: int = 1
     nome: str = "Joao da Silva"
-    cpf: str = "433.345.437-26"
+    cpf: str = "43334543726"
     birthdate: datetime = datetime(1974, 10, 5, 0, 0, 0, 0)
     flight: str = "TAM-1234"
     total_contatos: int = 1
