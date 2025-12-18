@@ -3,6 +3,7 @@ Flask-Cors
 flask-openapi3
 Flask-SQLAlchemy
 pydantic
+requests
 SQLAlchemy
 SQLAlchemy-Utils
 flask-restx

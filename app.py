@@ -10,6 +10,8 @@ from schemas import *
 from datetime import datetime
 from flask_cors import CORS
 
+import requests
+
 info = Info(title="Minha API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 CORS(app)
@@ -18,6 +20,7 @@ CORS(app)
 home_tag = Tag(name="Documentação", description="Seleção de documentação: Swagger, Redoc ou RapiDoc")
 passageiro_tag = Tag(name="Passageiro", description="Adição, visualização, atualização e remoção de passageiros à base")
 contato_tag = Tag(name="Contato", description="Adição de um contato a um passageiro cadastrado na base")
+external_tag = Tag(name="API Externa", description="Acesso às APIs externas")
 
 
 @app.get('/', tags=[home_tag])
@@ -25,6 +28,61 @@ def home():
     """Redireciona para /openapi, tela que permite a escolha do estilo de documentação.
     """
     return redirect('/openapi')
+
+# Endpoint to validate CPF
+@app.get("/external-data", tags=[external_tag])
+def get_external_data():
+    """
+    Calls an external API and returns the JSON response.
+    Example: /external-data?cpf=71454597011&birthdate=1935-12-04
+    """
+    cpf = request.args.get("cpf", "").strip()
+    birthdate = request.args.get("birthdate", "").strip()
+
+    # Validate input
+    if not cpf:
+        return jsonify({"error": "Missing 'cpf' query parameter"}), 400
+
+    if not birthdate:
+        return jsonify({"error": "Missing 'birthdate' query parameter"}), 400
+
+    try:
+        # External API 
+        api_key = "MpYLNaIH8agztz_PuGF0wuAX3AhU4D8souCpTdCk"
+        url = f"https://api.infosimples.com/api/v2/consultas/receita-federal/cpf?token={api_key}&cpf={cpf}&birthdate={birthdate}"
+
+        response = requests.post(url, timeout=5)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+
+        data = response.json()
+        code = data.get("code") #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
+        count = data.get("data_count")
+        
+        if count == 0:
+            # Return only relevant fields
+            result = {
+                "code": code, #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
+                "count": count,
+                "nome": "null",
+                "situacao": "null"
+            }
+        else:
+            # Return only relevant fields
+            result = {
+                "code": code, #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
+                "count": count,
+                "nome": data.get("data", [{}])[0].get("nome"),
+                "situacao": data.get("data", [{}])[0].get("situacao_cadastral")
+            }
+
+        return jsonify(result)
+
+    except requests.exceptions.Timeout:
+        return jsonify({"error": "External API request timed out"}), 504
+    except requests.exceptions.HTTPError as e:
+        return jsonify({"error": f"External API error: {e}"}), 502
+    except Exception as e:
+        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
 
 @app.post('/passageiro', tags=[passageiro_tag], 
