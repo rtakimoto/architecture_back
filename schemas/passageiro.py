@@ -41,7 +41,6 @@ class RetornaCPFSchema(BaseModel):
     """ Define como deve ser a estrutura que representa a busca. Que será
         feita apenas com base no nome do passageiro.
     """
-    cpf: str = "43334543726"
     code: int = 612 #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
     count: int = 0
     nome: str = ""    
