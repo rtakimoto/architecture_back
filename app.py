@@ -35,7 +35,7 @@ def home():
 def get_external_data(query: CPFValidaSchema):
     """
     Calls an external API and returns the JSON response.
-    Example: /external-data?cpf=71454597011&birthdate=1935-12-04
+    Example: /external-data?cpf=43334543726&birthdate=1974-10-05
     """
     cpf = query.cpf
     birthdate = query.birthdate
@@ -62,7 +62,7 @@ def get_external_data(query: CPFValidaSchema):
         if count == 0:
             # Return only relevant fields
             result = {
-                "code": code, #612 - nao encontrado, 608 - nascimento divergente do cpf, 200 - ok
+                "code": code, #612 - nao encontrado, 608 - nascimento divergente do cpf, 607 - cpf invalido, 200 - ok
                 "count": count,
                 "nome": "",
                 "situacao": ""
