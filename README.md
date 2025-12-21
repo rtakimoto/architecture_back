@@ -101,3 +101,5 @@ Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/]
 >$ docker rm <CONTAINER ID>
 >```
 >Para mais comandos, veja a [documentação do docker](https://docs.docker.com/engine/reference/run/).
+
+![architecture](architecture.png)
